@@ -13,8 +13,11 @@ import java.util.List;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.POST;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -42,47 +45,67 @@ public class FazendaWS {
      *
      * @return an instance of java.lang.String
      */
-    @GET
-    @Produces("text/html")
-    public String getJson() {
-        return "<h1>meu primeiro webservice restfull</h1>";
-    }
-
+//    @GET
+//    @Produces("text/html")
+//    public String get() {
+//        return "<h1>meu primeiro webservice restfull</h1>";
+//    }
     @GET()
     @Path("usuario/{login}")
     @Produces("application/json")
-    public String getUsuario(@PathParam("login") String login) {
+    public String get(@PathParam("login") String login) {
         Usuario usuario = new Usuario();
         usuario.setLogin(login);
-        
+
         UsuarioDAO dao = new UsuarioDAO();
-        usuario = dao.buscar(usuario);
-        
+        usuario = dao.get(usuario);
+
         Gson g = new Gson(); //biblioteca da Google para conversão de objeto para json
         return g.toJson(usuario);
     }
 
     @GET()
-    @Path("usuario/all")
+    @Path("usuario/todos")
     @Produces("application/json")
-    public String getAllUsuarios() {
+    public String get() {
         List<Usuario> lista;
 
         UsuarioDAO dao = new UsuarioDAO();
-        lista = dao.listar();
+        lista = dao.get();
 
         Gson g = new Gson();
         return g.toJson(lista);
     }
 
-    /**
-     * PUT method for updating or creating an instance of FazendaWS
-     *
-     * @param content representation for the resource
-     * @return an HTTP response with content of the updated or created resource.
-     */
+    @POST
+    @Consumes({"application/json"})
+    @Path("Usuario/inserir")
+    public boolean post(String content) {
+        Gson g = new Gson();
+        Usuario u = (Usuario) g.fromJson(content, Usuario.class);
+        UsuarioDAO dao = new UsuarioDAO();
+        return dao.post(u);
+    }
+
     @PUT
     @Consumes("application/json")
-    public void putJson(String content) {
+    @Path("usuario/alterar")
+    public void put(String content) {
+        Gson g = new Gson();
+        Usuario u = (Usuario) g.fromJson(content, Usuario.class);
+        UsuarioDAO dao = new UsuarioDAO();
+        dao.put(u);
+    }
+
+    @DELETE
+    @Path("usuario/excluir/{login}")
+    public boolean delete(@PathParam("login") String login) {
+        Usuario u = new Usuario();
+        u.setLogin(login);
+
+        UsuarioDAO dao = new UsuarioDAO();
+        u = dao.get(u);
+
+        return dao.delete(u);
     }
 }
