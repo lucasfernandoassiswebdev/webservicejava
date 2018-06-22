@@ -6,6 +6,7 @@
 package ws;
 
 import com.google.gson.Gson;
+import dao.UsuarioDAO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -63,23 +64,10 @@ public class FazendaWS {
     @Path("usuario/list")
     @Produces("application/json")
     public String getAllUsuarios() {
-        List<Usuario> lista = new ArrayList<Usuario>();
+        List<Usuario> lista;
         
-        Usuario usuario = new Usuario();
-        usuario.setEmail("l.assis@eddydata.com.br");
-        usuario.setLogin("l.assis");
-        usuario.setSenha("123");
-        usuario.setPerfil("Administrador");
-        
-        lista.add(usuario);
-        
-        usuario = new Usuario();
-        usuario.setEmail("t.martos@eddydata.com.br");
-        usuario.setLogin("t.martos");
-        usuario.setSenha("321");
-        usuario.setPerfil("Desenvolvedor");
-        
-        lista.add(usuario);
+        UsuarioDAO dao = new UsuarioDAO();
+        lista = dao.listar();
         
         Gson g = new Gson(); 
         return g.toJson(lista);

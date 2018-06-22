@@ -23,8 +23,8 @@ public class Conexao {
      * Os atributos usuario e senha representam usuario e senha do SGBD a ser
      * usado na conexão
      */
-    private static final String usuario = "postgres";
-    private static final String senha = "";
+    private static final String usuario = "userfazenda";
+    private static final String senha = "postgres";
     /**
      * O atributo con representa um objeto que contém a conexão com o banco de
      * dados em si
